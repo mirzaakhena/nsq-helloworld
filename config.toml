@@ -1,0 +1,5 @@
+[messagebroker]
+nsqd_url = "nsqd:4150"
+
+[log]
+path = "./log"

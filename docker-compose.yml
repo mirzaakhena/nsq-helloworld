@@ -1,0 +1,38 @@
+version: "3"
+services:
+
+  nsqlookupd:
+    image: nsqio/nsq
+    command: /nsqlookupd
+    ports:
+      - "4160"
+      - "4161"
+
+  nsqd:
+    image: nsqio/nsq
+    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160 --data-path=/data
+    depends_on:
+      - nsqlookupd
+    ports:
+      - "4150:4150"
+      - "4151"
+    volumes: 
+      - "./nsqdata:/data"
+
+  mirserverapi:
+    image: mirserverapi
+    command: /mirserver-api
+    volumes: 
+      - "./log:/log"
+      - "./config.toml:/config.toml"
+    ports:
+      - "8080:8080"
+
+  mirservercon:
+    image: mirservercon
+    command: /mirserver-con
+    depends_on:
+      - nsqd
+    volumes: 
+      - "./log:/log"
+      - "./config.toml:/config.toml"

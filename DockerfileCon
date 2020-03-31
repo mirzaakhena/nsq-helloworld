@@ -1,0 +1,7 @@
+FROM alpine:latest
+
+COPY dist/mirserver-con .
+RUN mkdir -p /log/logs
+
+CMD ["./mirserver-con"]
+
